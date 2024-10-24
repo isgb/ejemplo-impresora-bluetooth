@@ -79,7 +79,7 @@ const BluetoothApp = () => {
     }
     try {
       const ticket = '**********\n* Ejemplo de Ticket *\n**********\nGracias por su compra!\n';
-      await BluetoothClassic.write(ticket);
+      await BluetoothClassic.writeToDevice(ticket);
       console.log('Ticket printed successfully');
     } catch (error) {
       console.error('Error printing ticket:', error);
