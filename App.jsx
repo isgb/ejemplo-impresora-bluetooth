@@ -41,12 +41,13 @@ const BluetoothApp = () => {
         console.error('Error checking Bluetooth status:', error);
       }
     };
+
     startBluetooth();
   }, []);
 
   const listPairedDevices = async () => {
     try {
-      const pairedDevices = await BluetoothClassic.getBondedDevices(); // Actualizar esta línea
+      const pairedDevices = await BluetoothClassic.getBondedDevices();
       setDevices(pairedDevices);
     } catch (error) {
       console.error('Error listing paired devices:', error);
@@ -71,6 +72,20 @@ const BluetoothApp = () => {
     }
   };
 
+  const printTicket = async () => {
+    if (!connectedDevice) {
+      console.log('No device connected');
+      return;
+    }
+    try {
+      const ticket = '**********\n* Ejemplo de Ticket *\n**********\nGracias por su compra!\n';
+      await BluetoothClassic.write(ticket);
+      console.log('Ticket printed successfully');
+    } catch (error) {
+      console.error('Error printing ticket:', error);
+    }
+  };
+
   return (
     <View>
       <Text>{connectedDevice ? `Connected to ${connectedDevice.name}` : 'Not Connected'}</Text>
@@ -82,7 +97,12 @@ const BluetoothApp = () => {
           <Button title={`Connect to ${item.name}`} onPress={() => connectToDevice(item)} />
         )}
       />
-      {connectedDevice && <Button title="Disconnect" onPress={disconnectFromDevice} />}
+      {connectedDevice && (
+        <>
+          <Button title="Print Ticket" onPress={printTicket} />
+          <Button title="Disconnect" onPress={disconnectFromDevice} />
+        </>
+      )}
     </View>
   );
 };
